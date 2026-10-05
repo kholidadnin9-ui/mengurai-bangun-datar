@@ -1,0 +1,393 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fredoka", "Baloo 2", "Comic Sans MS", "Trebuchet MS", system-ui, sans-serif;
+  --color-wood-50: #fff8e6;
+  --color-wood-100: #fde7b0;
+  --color-wood-200: #f6cd83;
+  --color-wood-300: #e8aa57;
+  --color-wood-400: #d58c3c;
+  --color-wood-500: #b86f2a;
+  --color-wood-600: #8f5120;
+  --color-wood-700: #6b3b17;
+  --color-wood-800: #4a2810;
+}
+
+:root {
+  /* Serat kayu horizontal (SVG noise, tanpa file gambar) */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004 0.16' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.22  0 0 0 0 0.06  0 0 0 1.1 -0.38'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-display);
+  color: #4a2810;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+
+@layer components {
+/* ---------- Lantai / meja kayu (latar) ---------- */
+.wood-bg {
+  background-color: #f3c27b;
+  background-image:
+    var(--grain),
+    repeating-linear-gradient(
+      180deg,
+      transparent 0,
+      transparent 128px,
+      rgba(110, 58, 14, 0.5) 128px,
+      rgba(110, 58, 14, 0.5) 131px,
+      rgba(255, 240, 200, 0.55) 131px,
+      rgba(255, 240, 200, 0.55) 132px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.12) 0,
+      rgba(255, 255, 255, 0.12) 132px,
+      rgba(150, 80, 20, 0.08) 132px,
+      rgba(150, 80, 20, 0.08) 264px
+    ),
+    linear-gradient(180deg, #fbd697 0%, #f0b765 100%);
+  background-attachment: fixed;
+}
+
+/* ---------- Papan kayu ---------- */
+.wood-board {
+  position: relative;
+  background-color: #e9ad5d;
+  background-image:
+    var(--grain),
+    repeating-linear-gradient(
+      180deg,
+      transparent 0,
+      transparent 70px,
+      rgba(110, 58, 14, 0.35) 70px,
+      rgba(110, 58, 14, 0.35) 72px,
+      rgba(255, 236, 190, 0.4) 72px,
+      rgba(255, 236, 190, 0.4) 73px
+    ),
+    linear-gradient(180deg, #f6cb85, #e2a257);
+  border: 5px solid #8f5120;
+  border-radius: 24px;
+  box-shadow:
+    inset 0 3px 0 rgba(255, 244, 214, 0.75),
+    inset 0 -4px 0 rgba(120, 60, 10, 0.22),
+    0 8px 0 #6b3b17,
+    0 16px 24px rgba(80, 40, 10, 0.3);
+}
+
+/* Paku di 4 sudut */
+.nails::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, #fff1c2 0 2px, #9b7a3a 2.5px 4.5px, transparent 5px),
+    radial-gradient(circle, #fff1c2 0 2px, #9b7a3a 2.5px 4.5px, transparent 5px),
+    radial-gradient(circle, #fff1c2 0 2px, #9b7a3a 2.5px 4.5px, transparent 5px),
+    radial-gradient(circle, #fff1c2 0 2px, #9b7a3a 2.5px 4.5px, transparent 5px);
+  background-repeat: no-repeat;
+  background-size: 12px 12px;
+  background-position:
+    8px 8px,
+    calc(100% - 8px) 8px,
+    8px calc(100% - 8px),
+    calc(100% - 8px) calc(100% - 8px);
+}
+
+/* Kertas krem yang ditempel di papan */
+.paper {
+  background-color: #fffaf0;
+  background-image: radial-gradient(rgba(201, 142, 74, 0.2) 1.2px, transparent 1.4px);
+  background-size: 18px 18px;
+  border: 4px solid #c98e4a;
+  border-radius: 18px;
+  box-shadow:
+    inset 0 2px 8px rgba(120, 70, 20, 0.2),
+    0 2px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Papan kayu terang untuk tombol pilihan */
+.wood-plank {
+  background-color: #f6cd83;
+  background-image: var(--grain), linear-gradient(180deg, #fde3aa, #f1c070);
+  border: 4px solid #a8662a;
+  border-radius: 20px;
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.6),
+    0 6px 0 #8f5120,
+    0 10px 14px rgba(80, 40, 10, 0.25);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background 0.2s ease;
+  cursor: pointer;
+}
+.wood-plank:not(:disabled):hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.6),
+    0 9px 0 #8f5120,
+    0 14px 16px rgba(80, 40, 10, 0.25);
+}
+.wood-plank:not(:disabled):active {
+  transform: translateY(5px);
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.6),
+    0 1px 0 #8f5120;
+}
+.wood-plank:disabled {
+  cursor: default;
+}
+.plank-correct {
+  background-image: linear-gradient(180deg, #86e8a0, #3fc86d) !important;
+  border-color: #1f8f46 !important;
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.5),
+    0 6px 0 #17753a,
+    0 10px 14px rgba(20, 90, 40, 0.3) !important;
+  color: #0f4a24;
+}
+.plank-wrong {
+  background-image: linear-gradient(180deg, #ff9a9a, #f35f5f) !important;
+  border-color: #b32e2e !important;
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.45),
+    0 6px 0 #922424,
+    0 10px 14px rgba(120, 30, 30, 0.3) !important;
+  color: #5c1010;
+}
+.plank-dim {
+  opacity: 0.55;
+}
+.chip-on {
+  background-image: linear-gradient(180deg, #ffe08a, #ffb703) !important;
+  border-color: #c25d0a !important;
+  transform: translateY(4px);
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.55),
+    0 2px 0 #8f5120 !important;
+}
+
+/* ---------- Tombol mainan ---------- */
+.btn-toy {
+  border: 4px solid var(--b, #2c8a22);
+  border-radius: 22px;
+  background-image: linear-gradient(180deg, var(--t, #9bea7c), var(--m, #4cc33a));
+  color: #fff;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.5),
+    0 7px 0 var(--s, #22701b),
+    0 12px 16px rgba(40, 60, 20, 0.3);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+  cursor: pointer;
+}
+.btn-toy:hover {
+  transform: translateY(-3px);
+}
+.btn-toy:active {
+  transform: translateY(6px);
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.5),
+    0 1px 0 var(--s, #22701b);
+}
+.btn-green {
+  --t: #9bea7c;
+  --m: #4cc33a;
+  --b: #2c8a22;
+  --s: #22701b;
+}
+.btn-orange {
+  --t: #ffc36b;
+  --m: #ff8f2b;
+  --b: #c25d0a;
+  --s: #9b4a08;
+}
+.btn-blue {
+  --t: #8fd0ff;
+  --m: #3f9bf0;
+  --b: #1f65b0;
+  --s: #194f8a;
+}
+
+/* Teks judul berkontur kayu */
+.title-outline {
+  text-shadow:
+    -3px -3px 0 #6b3b17,
+    3px -3px 0 #6b3b17,
+    -3px 3px 0 #6b3b17,
+    3px 3px 0 #6b3b17,
+    0 -3px 0 #6b3b17,
+    0 3px 0 #6b3b17,
+    -3px 0 0 #6b3b17,
+    3px 0 0 #6b3b17,
+    0 7px 0 #6b3b17;
+}
+
+/* Blok kayu bercat (hiasan) */
+.block-toy {
+  background-color: #fff3d1;
+  border: 4px solid #a8662a;
+  border-radius: 18px;
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.7),
+    0 5px 0 #8f5120,
+    0 9px 12px rgba(80, 40, 10, 0.25);
+}
+
+}
+
+/* ---------- Animasi ---------- */
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--r, 0deg));
+  }
+  50% {
+    transform: translateY(-10px) rotate(calc(var(--r, 0deg) + 5deg));
+  }
+}
+@keyframes pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-9px);
+  }
+  40% {
+    transform: translateX(8px);
+  }
+  60% {
+    transform: translateX(-6px);
+  }
+  80% {
+    transform: translateX(5px);
+  }
+}
+@keyframes hop {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-16px);
+  }
+  60% {
+    transform: translateY(-4px);
+  }
+  80% {
+    transform: translateY(-8px);
+  }
+}
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-1.6deg);
+  }
+  50% {
+    transform: rotate(1.6deg);
+  }
+}
+@keyframes slide-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes confetti {
+  0% {
+    transform: translate3d(0, -12vh, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--dx, 0px), 108vh, 0) rotate(720deg);
+    opacity: 1;
+  }
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.18) rotate(8deg);
+  }
+}
+@keyframes blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  96% {
+    transform: scaleY(0.1);
+  }
+}
+
+.animate-floaty {
+  animation: floaty 3.6s ease-in-out infinite;
+}
+.animate-pop {
+  animation: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+.animate-hop {
+  animation: hop 0.8s ease-in-out;
+}
+.animate-sway {
+  transform-origin: top center;
+  animation: sway 4s ease-in-out infinite;
+}
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out both;
+}
+.animate-twinkle {
+  animation: twinkle 1.6s ease-in-out infinite;
+}
+.owl-eye {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: blink 4.5s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-floaty,
+  .animate-sway,
+  .animate-twinkle,
+  .owl-eye {
+    animation: none;
+  }
+}
